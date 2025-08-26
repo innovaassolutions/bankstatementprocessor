@@ -294,23 +294,47 @@ def get_folders():
     try:
         # Get current working directory and common output locations
         current_dir = os.getcwd()
-        folders = {
-            'current': current_dir,
-            'output': os.path.join(current_dir, 'output'),
-            'desktop': os.path.expanduser('~/Desktop'),
-            'documents': os.path.expanduser('~/Documents'),
-            'downloads': os.path.expanduser('~/Downloads')
-        }
         
-        # Check which folders exist and are writable
+        # For Docker containers, use host mount if available
+        host_root = '/host'
+        if os.path.exists(host_root):
+            # We're in Docker with host mount
+            folders = {
+                'current': current_dir,
+                'output': os.path.join(current_dir, 'output'),
+                'home': os.path.join(host_root, 'Users', os.environ.get('USER', 'toddabraham')),
+                'desktop': os.path.join(host_root, 'Users', os.environ.get('USER', 'toddabraham'), 'Desktop'),
+                'documents': os.path.join(host_root, 'Users', os.environ.get('USER', 'toddabraham'), 'Documents'),
+                'downloads': os.path.join(host_root, 'Users', os.environ.get('USER', 'toddabraham'), 'Downloads'),
+                'root': host_root
+            }
+        else:
+            # We're running locally
+            folders = {
+                'current': current_dir,
+                'output': os.path.join(current_dir, 'output'),
+                'home': os.path.expanduser('~'),
+                'desktop': os.path.expanduser('~/Desktop'),
+                'documents': os.path.expanduser('~/Documents'),
+                'downloads': os.path.expanduser('~/Downloads')
+            }
+        
+        # Check which folders exist and are accessible
         available_folders = {}
         for name, path in folders.items():
-            if os.path.exists(path) and os.access(path, os.W_OK):
-                available_folders[name] = {
-                    'path': path,
-                    'name': name.replace('_', ' ').title(),
-                    'writable': True
-                }
+            if os.path.exists(path):
+                # Check if readable (for host mount) or writable (for local)
+                is_accessible = os.access(path, os.R_OK)
+                if name in ['current', 'output']:
+                    is_accessible = is_accessible and os.access(path, os.W_OK)
+                
+                if is_accessible:
+                    available_folders[name] = {
+                        'path': path,
+                        'name': name.replace('_', ' ').title(),
+                        'writable': name in ['current', 'output'],
+                        'host_path': path
+                    }
         
         return jsonify({'folders': available_folders})
         
@@ -324,8 +348,14 @@ def browse_folder():
         data = request.get_json()
         path = data.get('path', os.getcwd())
         
+        # Handle special paths
+        if path == '.':
+            path = os.getcwd()
+        elif path == 'output':
+            path = os.path.join(os.getcwd(), 'output')
+        
         if not os.path.exists(path):
-            return jsonify({'error': 'Path does not exist'}), 404
+            return jsonify({'error': f'Path does not exist: {path}'}), 404
         
         if not os.path.isdir(path):
             return jsonify({'error': 'Path is not a directory'}), 400
@@ -337,11 +367,14 @@ def browse_folder():
                 item_path = os.path.join(path, item)
                 try:
                     if os.path.isdir(item_path):
+                        # Check if this is a host mount path
+                        is_host_path = path.startswith('/host')
                         items.append({
                             'name': item,
                             'type': 'folder',
                             'path': item_path,
-                            'writable': os.access(item_path, os.W_OK)
+                            'writable': os.access(item_path, os.W_OK) if not is_host_path else False,
+                            'is_host_path': is_host_path
                         })
                     else:
                         items.append({
@@ -360,10 +393,15 @@ def browse_folder():
         except PermissionError:
             return jsonify({'error': 'Permission denied accessing directory'}), 403
         
+        # Determine parent path
+        parent_path = None
+        if path != '/' and path != os.getcwd():
+            parent_path = os.path.dirname(path)
+        
         return jsonify({
             'current_path': path,
             'items': items,
-            'parent_path': os.path.dirname(path) if path != '/' else None
+            'parent_path': parent_path
         })
         
     except Exception as e:

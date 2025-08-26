@@ -708,6 +708,18 @@
             color: #dc3545;
         }
 
+        .host-indicator {
+            color: #28a745;
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+
+        .writable-indicator {
+            color: #007bff;
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+
         .consolidation-options {
             display: flex;
             flex-direction: column;
@@ -1741,15 +1753,25 @@
             const folderList = document.getElementById('folderList');
             folderList.innerHTML = '';
             
+            if (items.length === 0) {
+                folderList.innerHTML = '<div class="empty-state">No items in this directory</div>';
+                return;
+            }
+            
             items.forEach(item => {
                 const folderItem = document.createElement('div');
                 folderItem.className = 'folder-item';
                 
                 if (item.type === 'folder') {
                     folderItem.onclick = () => browseFolder(item.path);
+                    
+                    // Add visual indicator for host paths
+                    const hostIndicator = item.is_host_path ? ' <span class="host-indicator">(Host)</span>' : '';
+                    const writableIndicator = item.writable ? ' <span class="writable-indicator">(Writable)</span>' : '';
+                    
                     folderItem.innerHTML = `
                         <div class="folder-icon">📁</div>
-                        <div class="folder-name">${item.name}</div>
+                        <div class="folder-name">${item.name}${hostIndicator}${writableIndicator}</div>
                         <div class="folder-path">${item.path}</div>
                     `;
                 } else {
@@ -1854,6 +1876,14 @@
 
         function goToCurrent() {
             browseFolder('output');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         function selectCurrentFolder() {
