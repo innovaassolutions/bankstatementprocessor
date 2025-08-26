@@ -1,4 +1,8 @@
 from flask import Flask, request, jsonify, send_file, render_template
+
+# Version information
+VERSION = "1.0.0"
+BUILD_DATE = "2025-08-26 16:52:34"
 from flask_cors import CORS
 import os
 import tempfile
