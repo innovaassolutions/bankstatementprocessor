@@ -1,0 +1,42 @@
+# Merchant Categories Configuration
+# Format: CategoryName = search_term1, search_term2, search_term3
+# Lines starting with # are comments and ignored
+
+BIDFORD = BIDFORD, bidford
+CYCLEPAC = CYCLEPAC, cyclepac
+GRAB RIDES = GRAB RIDES, grab rides
+PHOON HUAT = PHOON HUAT, phoon huat
+adyen = adyen, ADYEN, Adyen
+aidan = aidan, AIDAN
+amazon = amazon, AMAZON, Amazon.com
+at = at, At, aT
+atlas = atlas, ATLAS
+bf = bf, Bf, bF
+coke = coke, COKE
+cp = cp, Cp, cP
+cy = cy, Cy, cY
+deliveroo = deliveroo, DELIVEROO
+foodedge = foodedge, FOODEDGE
+foodpanda = foodpanda, FOODPANDA, Foodpanda Malaysia
+foodxervices = foodxervices, FOODXERVICES
+freshmart = freshmart, FRESHMART, Freshmart
+fx = fx, Fx, fX
+gb = gb, Gb, gB
+gojek = gojek, GOJEK
+gpay = gpay, GPAY, Google Pay
+grab = grab, GRAB, Grab Rides
+gregory = gregory, GREGORY
+hela = hela, HELA
+hero = hero, HERO, Hero Supermarket, Delivery Hero
+kartini = kartini, KARTINI
+lalamove = lalamove, LALAMOVE, LalaMove
+lily = lily, LILY, LILY DO SDN BHD
+looi = looi, Looi
+myr = myr, MYR, Malaysian Ringgit
+ph = ph, Ph, pH
+revelsystems = revelsystems, REVELSYSTEMS
+savouri = savouri, SAVOURI
+skp = skp, Skp, sKp, skP
+spl = spl, Spl, sPl, spL
+sv = sv, Sv, sV
+swl = swl, Swl, sWl, swL
