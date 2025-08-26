@@ -16,6 +16,7 @@ NC='\033[0m' # No Color
 DOCKER_USERNAME="innovaassolutions"
 IMAGE_NAME="bank-processor"
 GITHUB_REPO="innovaassolutions/bankstatementprocessor"
+DOCKER_REPO="innovaassolutions/bank-processor"
 
 echo -e "${BLUE}🚀 Bank Statement Processor Release Script${NC}"
 echo "================================================"
@@ -54,12 +55,12 @@ echo -e "${BLUE}🔄 Step 1: Updating version across project files...${NC}"
 python3 update_version.py $VERSION
 
 echo -e "${BLUE}🔄 Step 2: Building Docker image...${NC}"
-docker build -t $DOCKER_USERNAME/$IMAGE_NAME:$VERSION .
-docker tag $DOCKER_USERNAME/$IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:latest
+docker build -t $DOCKER_REPO:$VERSION .
+docker tag $DOCKER_REPO:$VERSION $DOCKER_REPO:latest
 
 echo -e "${BLUE}🔄 Step 3: Testing Docker image...${NC}"
 # Start container in background
-CONTAINER_ID=$(docker run -d -p 3005:5000 $DOCKER_USERNAME/$IMAGE_NAME:$VERSION)
+CONTAINER_ID=$(docker run -d -p 3005:5000 $DOCKER_REPO:$VERSION)
 
 # Wait for container to start
 echo "Waiting for container to start..."
@@ -81,8 +82,8 @@ docker stop $CONTAINER_ID
 docker rm $CONTAINER_ID
 
 echo -e "${BLUE}🔄 Step 4: Pushing to Docker Hub...${NC}"
-docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
-docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+docker push $DOCKER_REPO:$VERSION
+docker push $DOCKER_REPO:latest
 
 echo -e "${BLUE}🔄 Step 5: Creating Git release...${NC}"
 # Add all changes
@@ -108,13 +109,13 @@ echo -e "${GREEN}🎉 Release $VERSION completed successfully!${NC}"
 echo ""
 echo -e "${BLUE}📋 What users need to do to get updates:${NC}"
 echo "1. Pull latest version:"
-echo "   docker pull $DOCKER_USERNAME/$IMAGE_NAME:latest"
+echo "   docker pull $DOCKER_REPO:latest"
 echo ""
 echo "2. Or pull specific version:"
-echo "   docker pull $DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
+echo "   docker pull $DOCKER_REPO:$VERSION"
 echo ""
 echo "3. Update their docker-compose.yml or run command:"
-echo "   docker run -p 3005:5000 $DOCKER_USERNAME/$IMAGE_NAME:$VERSION"
+echo "   docker run -p 3005:5000 $DOCKER_REPO:$VERSION"
 echo ""
 echo -e "${YELLOW}💡 Pro tip: Users can set up automatic updates by:${NC}"
 echo "1. Using 'latest' tag in their scripts"

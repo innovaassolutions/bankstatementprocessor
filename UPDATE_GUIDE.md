@@ -2,12 +2,14 @@
 
 This guide explains how to get updates when new versions of the Bank Statement Processor are released on Docker Hub.
 
+**Docker Hub Repository**: `innovaassolutions/bank-processor`
+
 ## 🚀 Quick Update Commands
 
 ### **Option 1: Update to Latest Version**
 ```bash
 # Pull the latest version
-docker pull yourusername/bank-processor:latest
+docker pull innovaassolutions/bank-processor:latest
 
 # Stop current container
 docker stop your-container-name
@@ -16,20 +18,20 @@ docker stop your-container-name
 docker rm your-container-name
 
 # Start new container with latest version
-docker run -d -p 3005:5000 --name bank-processor yourusername/bank-processor:latest
+docker run -d -p 3005:5000 --name bank-processor innovaassolutions/bank-processor:latest
 ```
 
 ### **Option 2: Update to Specific Version**
 ```bash
 # Pull specific version (e.g., 1.1.0)
-docker pull yourusername/bank-processor:1.1.0
+docker pull innovaassolutions/bank-processor:1.1.0
 
 # Stop and remove old container
 docker stop your-container-name
 docker rm your-container-name
 
 # Start new container with specific version
-docker run -d -p 3005:5000 --name bank-processor yourusername/bank-processor:1.1.0
+docker run -d -p 3005:5000 --name bank-processor innovaassolutions/bank-processor:1.1.0
 ```
 
 ## 🔧 Using Docker Compose
@@ -39,7 +41,7 @@ docker run -d -p 3005:5000 --name bank-processor yourusername/bank-processor:1.1
 version: '3.8'
 services:
   bank-processor:
-    image: yourusername/bank-processor:latest  # or specific version like :1.1.0
+    image: innovaassolutions/bank-processor:latest  # or specific version like :1.1.0
     ports:
       - "3005:5000"
     volumes:
@@ -67,7 +69,7 @@ docker-compose up -d
 crontab -e
 
 # Add this line to check for updates daily at 2 AM
-0 2 * * * cd /path/to/your/project && docker pull yourusername/bank-processor:latest && docker-compose up -d
+0 2 * * * cd /path/to/your/project && docker pull innovaassolutions/bank-processor:latest && docker-compose up -d
 ```
 
 ### **Option 2: Update Script**
@@ -95,7 +97,7 @@ docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   containrrr/watchtower \
   --interval 86400 \
-  yourusername/bank-processor
+  innovaassolutions/bank-processor
 ```
 
 ## 📋 Update Checklist
@@ -111,7 +113,7 @@ Before updating, ensure you:
 
 2. **Check current version**:
    ```bash
-   docker inspect yourusername/bank-processor:latest | grep -i version
+   docker inspect innovaassolutions/bank-processor:latest | grep -i version
    ```
 
 3. **Review release notes** on GitHub for breaking changes
@@ -123,7 +125,7 @@ Before updating, ensure you:
 ### **Check Available Versions**
 ```bash
 # List all available tags
-docker images yourusername/bank-processor
+docker images innovaassolutions/bank-processor
 
 # Check version in running container
 docker exec your-container-name python -c "import app; print(app.VERSION)"
