@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   bank-processor:
-    image: innovaassolutions/bank-processor:latest
+    image: innovaasdev/bankstatementprocessor:latest
     build: .
     ports:
       - "3005:5000"

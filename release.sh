@@ -13,10 +13,10 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-DOCKER_USERNAME="innovaassolutions"
-IMAGE_NAME="bank-processor"
+DOCKER_USERNAME="innovaasdev"
+IMAGE_NAME="bankstatementprocessor"
 GITHUB_REPO="innovaassolutions/bankstatementprocessor"
-DOCKER_REPO="innovaassolutions/bank-processor"
+DOCKER_REPO="innovaasdev/bankstatementprocessor"
 
 echo -e "${BLUE}🚀 Bank Statement Processor Release Script${NC}"
 echo "================================================"
