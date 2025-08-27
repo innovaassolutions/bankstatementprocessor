@@ -7,6 +7,7 @@ CYCLEPAC = CYCLEPAC, cyclepac
 GRAB RIDES = GRAB RIDES, grab rides
 PHOON HUAT = PHOON HUAT, phoon huat
 adyen = adyen, ADYEN, Adyen
+stripe = stripe, STRIPE, Stripe
 aidan = aidan, AIDAN
 amazon = amazon, AMAZON, Amazon.com
 at = at, At, aT
